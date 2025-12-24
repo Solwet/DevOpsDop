@@ -86,6 +86,14 @@ scrape_configs:
       - targets: ['cadvisor:8080']
 ```
 
+docker-compose up -d
+
+docker ps
+
+
+Должны быть видны 4 контейнера: webapp, cadvisor, prometheus, grafana.
+
+
 ---
 
 ## Этап 3: Проверка cAdvisor
