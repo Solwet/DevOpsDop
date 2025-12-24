@@ -110,6 +110,11 @@ docker ps
 ## Этап 4: Проверка Prometheus
 
 
+Открой:
+🔗 http://localhost:9090
+Перейди: Status → Targets
+→ Убедись, что cadvisor имеет статус UP
+
 
 ## Этап 5: Подключение Grafana к Prometheus
 
