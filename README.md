@@ -119,6 +119,20 @@ docker ps
 ## Этап 5: Подключение Grafana к Prometheus
 
 
+Открой:
+🔗 http://localhost:3000
+Войди:
+Логин: admin
+Пароль: admin
+При первом входе — поменяй пароль (можно оставить admin для теста)
+Добавь источник данных:
+Configuration → Data Sources → Add data source
+Выбери Prometheus
+В поле URL введи:
+1
+http://prometheus:9090
+
+
 
 
 
