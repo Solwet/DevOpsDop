@@ -72,6 +72,20 @@ networks:
     driver: bridge
 ```
 
+
+nano prometheus.yml
+
+
+```yml
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+```
+
 ---
 
 ## Этап 3: Проверка cAdvisor
