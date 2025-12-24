@@ -5,8 +5,10 @@
 ---
 1. Создайте новую директорию для проекта
 
-mkdir monitoring-stack
-cd monitoring-stack
+  mkdir monitoring-stack
+  
+  cd monitoring-stack
+  
 ---
 
 ## Этап 2: Запуск стека мониторинга
