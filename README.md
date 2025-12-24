@@ -5,52 +5,83 @@
 ---
 1. Создайте новую директорию для проекта
 
-<img width="313" height="54" alt="image" src="https://github.com/user-attachments/assets/9aed1f50-2a98-40a4-ab69-4864763030eb" />
-
----
-
-2. Внутри создайте файл `docker-compose.yml` с определением всех сервисов (webapp, cadvisor, prometheus, grafana)
-    - Убедитесь, что все контейнеры находятся в одной Docker-сети
-    - Укажите правильные маппинги портов для каждого сервиса
-
-
+mkdir monitoring-stack
+cd monitoring-stack
 ---
 
 ## Этап 2: Запуск стека мониторинга
-1. Запустите все контейнеры с помощью docker-compose
 
-<img width="1459" height="655" alt="image" src="https://github.com/user-attachments/assets/2969366e-1a88-41c8-b526-5c28cde3a69e" />
+nano docker-compose.yml
 
-2. Проверьте, что все контейнеры работают (используйте команду `docker ps`)
 
-<img width="1471" height="333" alt="image" src="https://github.com/user-attachments/assets/6ea111dc-af2a-417a-b9a7-c44a690a50a0" />
+```yaml
+version: '3.8'
 
-3. Убедитесь, что нет ошибок запуска (проверьте логи контейнеров при необходимости)
+services:
+  webapp:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    networks:
+      - monitor-net
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    privileged: true
+    devices:
+      - /dev/kmsg
+    networks:
+      - monitor-net
+
+  prometheus:
+    image: prom/prometheus:v2.47.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    networks:
+      - monitor-net
+
+  grafana:
+    image: grafana/grafana:10.1.5
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - monitor-net
+
+networks:
+  monitor-net:
+    driver: bridge
+```
 
 ---
 
 ## Этап 3: Проверка cAdvisor
 
-<img width="1836" height="950" alt="image" src="https://github.com/user-attachments/assets/32f02936-a07d-41ff-9a22-85722db0f18b" />
 
-
-<img width="1565" height="858" alt="image" src="https://github.com/user-attachments/assets/2904f187-97eb-433e-a37d-37bcd7a585ce" />
-
----
 
 ## Этап 4: Проверка Prometheus
 
 
-<img width="1915" height="670" alt="image" src="https://github.com/user-attachments/assets/eed8063b-a8f6-45ef-85d4-a625d9171163" />
-
----
 
 ## Этап 5: Подключение Grafana к Prometheus
 
-<img width="1890" height="882" alt="image" src="https://github.com/user-attachments/assets/b9434224-9bbe-4d10-b802-025e5d40b862" />
-
-
-<img width="1770" height="809" alt="image" src="https://github.com/user-attachments/assets/ad5a38c7-a1e1-4175-8fbd-4f285df883af" />
 
 
 
