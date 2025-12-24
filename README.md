@@ -140,6 +140,17 @@ for i in {1..1000}; do curl -s http://localhost > /dev/null; done
 
 
 
+sudo apt update
+sudo apt install -y docker.io
+
+sudo systemctl start docker
+sudo systemctl enable docker
+
+sudo systemctl status docker
+
+
+
+
 
 
 
